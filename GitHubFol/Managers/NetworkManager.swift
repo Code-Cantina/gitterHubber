@@ -6,11 +6,12 @@
 //  Copyright © 2020 Danny Copeland. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
-class NetworkManager {
+class NetworkManager { //singleton, 1 instance
     static let shared = NetworkManager()
-    let baseUrl = "https://api.github.com/users/"
+    private let baseUrl = "https://api.github.com/users/"
+    let cache = NSCache<NSString, UIImage>()
     
     private init() {}
     
