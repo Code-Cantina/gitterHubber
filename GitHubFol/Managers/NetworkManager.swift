@@ -57,6 +57,51 @@ class NetworkManager { //singleton, 1 instance
             } catch {
                 completed(.failure(.invalidData))
             }
+        }
+        task.resume() //start the network call
+    }
+    
+    //@escaping. closure have to outlive the function for async calls. By Default closures are not escaping
+    func getUserInfo(for userName: String, completed: @escaping (Result<User, GFError>) -> Void) {
+        let endpoint = baseUrl + "\(userName)"
+        
+        guard let url = URL(string: endpoint) else {
+            completed(.failure(.invalidUserName))
+            return
+        }
+        
+        //paranthesis around variables returned are optional (data, response, error)
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let _ = error { //if the error exists
+                completed(.failure(.unableToComplete))
+                return
+            }
+            
+            //if the respons eis not nil, set it to response var.. check response status code for 200, else do the block
+            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+                //something other than 200.. or nil response?
+                completed(.failure(.invalidResponse))
+                return
+            }
+            
+            //check the data if we make it here
+            guard let data = data else {
+                completed(.failure(.invalidData))
+                return
+            }
+            
+            //parse the data
+            do {
+                let decoder = JSONDecoder()
+                //convert the snale case stuff to our camel casing values in codable class
+                decoder.keyDecodingStrategy = .convertFromSnakeCase
+                let user = try decoder.decode(User.self, from: data)
+                
+                completed(.success(user))
+                
+            } catch {
+                completed(.failure(.invalidData))
+            }
             
         }
         
