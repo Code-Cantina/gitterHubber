@@ -47,7 +47,7 @@ class FavoritesListVC: GFDataLoadingVC {
             switch result {
             case .success(let favorites):
                 if favorites.isEmpty {
-                    self.showEmptyStateView(with: "No Favorites?\n Add favorites fromt he follower screen", in: self.view)
+                    self.showEmptyStateView(with: "No Favorites?\n Add favorites from the follower screen", in: self.view)
                 } else {
                     self.favorites = favorites
                     DispatchQueue.main.async {
