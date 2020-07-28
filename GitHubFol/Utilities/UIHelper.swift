@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct UIHelper {
+enum UIHelper {
     
     //the view controller does not care about this, so I moved it out to a helper
     static func createThreeColumnFlowLayout(in view: UIView) -> UICollectionViewFlowLayout {
